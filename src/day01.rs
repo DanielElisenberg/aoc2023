@@ -1,7 +1,7 @@
-fn solve_part_one() {
-    let file = std::fs::read_to_string("input/day01").unwrap();
-    let lines = file.split("\n");
-    let calibration_sum: i32 = lines
+fn solve_part_one() -> i32 {
+    return std::fs::read_to_string("input/day01")
+        .unwrap()
+        .split("\n")
         .filter(|line| !line.is_empty())
         .map(|line| {
             let numbers = line
@@ -14,17 +14,15 @@ fn solve_part_one() {
                 .unwrap();
         })
         .sum();
-
-    println!("Part 1: {}", calibration_sum);
 }
 
-fn solve_part_two() {
-    let file = std::fs::read_to_string("input/day01").unwrap();
-    let lines = file.split("\n");
+fn solve_part_two() -> i32 {
     let number_words = vec![
         "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
     ];
-    let calibration_sum: i32 = lines
+    return std::fs::read_to_string("input/day01")
+        .unwrap()
+        .split("\n")
         .filter(|line| !line.is_empty())
         .map(|line| {
             let mut numbers = Vec::new();
@@ -46,11 +44,9 @@ fn solve_part_two() {
                 .unwrap();
         })
         .sum();
-
-    println!("Part 2: {}", calibration_sum);
 }
 
 pub fn solve() {
-    solve_part_one();
-    solve_part_two();
+    println!("Part 1: {}", solve_part_one());
+    println!("Part 2: {}", solve_part_two());
 }
