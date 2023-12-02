@@ -1,4 +1,44 @@
-fn parse_all_games() -> Vec<(i32, Vec<Vec<(String, i32)>>)> {
+enum Color {
+    Red,
+    Green,
+    Blue,
+}
+
+struct Cube {
+    color: Color,
+    count: i32,
+}
+
+struct Set {
+    cubes: Vec<Cube>,
+}
+
+struct Game {
+    number: i32,
+    sets: Vec<Set>,
+}
+
+fn parse_set(set_string: &str) -> Set {
+    return Set {
+        cubes: set_string
+            .split(",")
+            .map(|colored_cubes| {
+                let split_colored_cubes = colored_cubes.split(" ").collect::<Vec<&str>>();
+                return Cube {
+                    color: match split_colored_cubes[2] {
+                        "red" => Color::Red,
+                        "green" => Color::Green,
+                        "blue" => Color::Blue,
+                        _ => panic!("unknown color {}", split_colored_cubes[2]),
+                    },
+                    count: split_colored_cubes[1].parse::<i32>().unwrap(),
+                };
+            })
+            .collect::<Vec<Cube>>(),
+    };
+}
+
+fn parse_all_games() -> Vec<Game> {
     return std::fs::read_to_string("input/day02")
         .unwrap()
         .split("\n")
@@ -10,58 +50,43 @@ fn parse_all_games() -> Vec<(i32, Vec<Vec<(String, i32)>>)> {
                 .unwrap();
             let game_sets = split_line[1]
                 .split(";")
-                .map(|set| {
-                    return set
-                        .split(",")
-                        .map(|colored_cubes| {
-                            let split_colored_cubes =
-                                colored_cubes.split(" ").collect::<Vec<&str>>();
-                            return (
-                                split_colored_cubes[2].to_string(),
-                                split_colored_cubes[1].parse::<i32>().unwrap(),
-                            );
-                        })
-                        .collect::<Vec<(String, i32)>>();
-                })
-                .collect::<Vec<Vec<(String, i32)>>>();
-            return (game_number, game_sets);
+                .map(|set| parse_set(set))
+                .collect::<Vec<Set>>();
+            return Game {
+                number: game_number,
+                sets: game_sets,
+            };
         })
-        .collect::<Vec<(i32, Vec<Vec<(String, i32)>>)>>();
+        .collect::<Vec<Game>>();
 }
 
 fn solve_one() -> i32 {
     return parse_all_games()
         .into_iter()
         .map(|game| {
-            let (game_number, game_sets) = game;
-            let mut impossible_game = false;
-            game_sets.into_iter().for_each(|set| {
-                if impossible_game {
-                    return;
-                }
-                for cube in set {
-                    let (color, count) = cube;
-                    match color.as_str() {
-                        "red" => {
-                            if count > 12 {
-                                impossible_game = true
+            let impossible_game = game.sets.into_iter().any(|set| {
+                for cube in set.cubes {
+                    match cube.color {
+                        Color::Red => {
+                            if cube.count > 12 {
+                                return true;
                             }
                         }
-                        "green" => {
-                            if count > 13 {
-                                impossible_game = true
+                        Color::Green => {
+                            if cube.count > 13 {
+                                return true;
                             }
                         }
-                        "blue" => {
-                            if count > 14 {
-                                impossible_game = true
+                        Color::Blue => {
+                            if cube.count > 14 {
+                                return true;
                             }
                         }
-                        _ => panic!("unknown color"),
                     }
                 }
+                return false;
             });
-            return if impossible_game { 0 } else { game_number };
+            return if impossible_game { 0 } else { game.number };
         })
         .sum();
 }
@@ -70,30 +95,27 @@ fn solve_two() -> i32 {
     return parse_all_games()
         .into_iter()
         .map(|game| {
-            let (_, game_sets) = game;
             let mut heighest_red = 0;
             let mut heighest_green = 0;
             let mut heighest_blue = 0;
-            game_sets.into_iter().for_each(|set| {
-                for cube in set {
-                    let (color, count) = cube;
-                    match color.as_str() {
-                        "red" => {
-                            if count > heighest_red {
-                                heighest_red = count;
+            game.sets.into_iter().for_each(|set| {
+                for cube in set.cubes {
+                    match cube.color {
+                        Color::Red => {
+                            if cube.count > heighest_red {
+                                heighest_red = cube.count;
                             }
                         }
-                        "green" => {
-                            if count > heighest_green {
-                                heighest_green = count;
+                        Color::Green => {
+                            if cube.count > heighest_green {
+                                heighest_green = cube.count;
                             }
                         }
-                        "blue" => {
-                            if count > heighest_blue {
-                                heighest_blue = count;
+                        Color::Blue => {
+                            if cube.count > heighest_blue {
+                                heighest_blue = cube.count;
                             }
                         }
-                        _ => panic!("unknown color"),
                     }
                 }
             });
