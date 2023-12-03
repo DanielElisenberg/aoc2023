@@ -60,7 +60,7 @@ fn parse_all_games() -> Vec<Game> {
         .collect::<Vec<Game>>();
 }
 
-fn solve_one() -> i32 {
+fn solve_part_one() -> i32 {
     return parse_all_games()
         .into_iter()
         .map(|game| {
@@ -91,7 +91,7 @@ fn solve_one() -> i32 {
         .sum();
 }
 
-fn solve_two() -> i32 {
+fn solve_part_two() -> i32 {
     return parse_all_games()
         .into_iter()
         .map(|game| {
@@ -125,6 +125,6 @@ fn solve_two() -> i32 {
 }
 
 pub fn solve() {
-    println!("Part 1: {}", solve_one());
-    println!("Part 2: {}", solve_two());
+    println!("Part 1: {}", solve_part_one());
+    println!("Part 2: {}", solve_part_two());
 }
