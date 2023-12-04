@@ -59,7 +59,6 @@ fn solve_part_one() -> i32 {
                 .split(" ")
                 .filter(|number| !number.is_empty())
                 .collect::<Vec<&str>>();
-            println!("{:?}", winning_numbers);
             let mut my_score = 0;
             card_info.split("|").collect::<Vec<&str>>()[1]
                 .split(" ")

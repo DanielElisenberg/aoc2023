@@ -1,11 +1,20 @@
+use std::env;
+
 mod day01;
 mod day02;
 mod day03;
 mod day04;
 
 fn main() {
-    day01::solve();
-    day02::solve();
-    day03::solve();
-    day04::solve();
+    let days = [day01::solve, day02::solve, day03::solve, day04::solve];
+    if let Some(arg) = env::args().nth(1) {
+        println!("Day {}:", arg);
+        days[arg.parse::<usize>().unwrap() - 1]();
+    } else {
+        days.iter().enumerate().for_each(|(day, solution)| {
+            println!("Day {}:", day + 1);
+            solution();
+            println!();
+        });
+    }
 }
