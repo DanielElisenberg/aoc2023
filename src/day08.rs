@@ -19,7 +19,7 @@ fn greatest_common_divisor(a: i64, b: i64) -> i64 {
     return num1;
 }
 
-fn lowest_common_multiple(numbers: Vec<i64>) -> i64 {
+pub fn lowest_common_multiple(numbers: Vec<i64>) -> i64 {
     let mut lowest_common = numbers[0];
     numbers.into_iter().for_each(|number| {
         lowest_common = lowest_common * (number / greatest_common_divisor(lowest_common, number));

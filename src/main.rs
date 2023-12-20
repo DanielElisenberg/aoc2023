@@ -19,6 +19,7 @@ mod day16;
 mod day17;
 mod day18;
 mod day19;
+mod day20;
 
 fn main() {
     let days = [
@@ -41,6 +42,7 @@ fn main() {
         day17::solve,
         day18::solve,
         day19::solve,
+        day20::solve,
     ];
     if let Some(arg) = env::args().nth(1) {
         println!("Day {}:", arg);
